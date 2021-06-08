@@ -6,7 +6,6 @@
         <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     </head>
     <body>
-        <h1>Oh. Hi, Mark.</h1>
         <div id='app'></div>
         <script type='text/babel'>
             const { render } = ReactDOM;
@@ -15,29 +14,32 @@
                 constructor() {
                     super();
                     this.state = {
-                        products: [faker.commerce.product()]
-                    };
-                    const interval = setInterval(()=> {
-                        const products = [...this.state.products, faker.commerce.product()];
-                        this.setState({ products });
-
-                        if(this.state.products.length === 10) {
-                            window.clearInterval(interval);
-                        }
-                    }, 1000);
+                        companies: []
+                    },
+                    this.addCompany = this.addCompany.bind(this);
                 }
+                deleteCompany(idx) {
+                    const companies = this.state.companies.filter( (_, _idx)=> _idx !== idx);
+                    this.setState({ companies });
+                }
+
+                addCompany() {
+                    const company = faker.company.companyName();
+                    this.setState({ companies: [...this.state.companies, company]});
+                }
+
                 render() {
                     return (
                         <div>
-                            <h1>Products</h1>
+                            <h1>Companies</h1>
+                            <button onClick= { this.addCompany }>Add +</button>
                             <ul>
                             {
-                                this.state.products.map((product, idx) => {
+                                this.state.companies.map((comp, idx) => {
                                     return (
                                         <li key = { idx }>
-                                            {
-                                                product
-                                            }
+                                            { comp }
+                                            <button onClick= {()=> this.deleteCompany(idx)}>x</button>
                                         </li>
                                     );
                                 })
